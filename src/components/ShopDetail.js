@@ -1,16 +1,34 @@
-import React, { useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { ShopContext } from "../contexts/ShopContext";
+import axios from "axios";
 
 const ShopDetail = () => {   
     const { id } = useParams();
-    const { shop } = useContext(ShopContext);
+    const [ shop, setShop ] = useState(null);
+    const [ error, setError ] = useState('');
+    const [loading, setLoading] = useState(true);
+    // const { shop } = useContext(ShopContext);
 
-    if (!shop) {
-        return <div className="bg-blue-50 py-20 px-8 text-center">No shop selected</div>
+    useEffect(() => {
+        axios.get(`http://127.0.0.1:8000/api/shops/show?id=${id}`)
+        .then(res => {
+            setShop(res.data.data);
+            setLoading(false);
+            setError('');
+        })
+        .catch(err => {
+            setLoading(false);
+            setError('Something went wrong!');
+        })
+    }, [id]);
+
+    if (loading) {
+        return <div className="bg-blue-50 py-20 px-8 text-center">Loading . . .</div>;
     }
 
     return (
+        <>
+        { shop ? (
         <div className="bg-blue-50 py-20 px-8">
             <div className="w-full h-64 bg-gray-100 rounded-xl overflow-hidden mb-8">
                 {shop.image ? (
@@ -51,9 +69,10 @@ const ShopDetail = () => {
     
             <div>
                 <h2 className="text-xl font-semibold mb-2">Floor:</h2>
-                <p className="text-gray-600">{shop.floor ? `Level ${shop.floor.level}` : "No floor information."}</p>
+                <p className="text-gray-600">{shop.floor ? `${shop.floor.level}` : "No floor information."}</p>
             </div>
-      </div>
+        </div>) : ''}
+        </>
     );
 };
 
