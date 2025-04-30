@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import Hero from '../components/Hero';
 import Category from '../components/Category';
 import Shop from '../components/Shop';
 import SearchBar from '../components/SearchBar';
 import axios from 'axios';
+import { scroller } from 'react-scroll';
 
 const Home = () => {
+  const location = useLocation();
   const [selectedCategoryId, setSelectedCategoryId] = useState('all');
   const [shops, setShops] = useState([]);
   const [error, setError] = useState('');
@@ -43,6 +46,16 @@ const Home = () => {
     setFilteredShops(results);
 
   }, [selectedCategoryId, searchTerm, shops]);
+
+  useEffect(() => {
+    if (location.state?.scrollTo) {
+      scroller.scrollTo(location.state.scrollTo, {
+        smooth: true,
+        offset: -70,
+        duration: 500,
+      });
+    }
+  }, [location.state]);
 
   return (
     <div>

@@ -1,16 +1,13 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { scroller } from 'react-scroll';
+import React from "react";
+import { useNavigate  } from "react-router-dom";
 import routes from "../routes";
 
 
 const Navbar = () => {
-    const handleScroll = (name) => {
-        scroller.scrollTo(name, {
-          smooth: true,
-          offset: -70,
-          duration: 500,
-        });
+    const navigate = useNavigate();
+
+    const handleClick = (name) => {
+        navigate('/', { state: { scrollTo: name } });
     };
 
     return (
@@ -19,14 +16,14 @@ const Navbar = () => {
 
             <div className="flex gap-6">
                 { routes.map((route) => (
-                    <Link
+                <span
                     key={route.name}
                     to={route.path}
-                    onClick={() => handleScroll(route.name)}
+                    onClick={() => handleClick(route.name)}
                     className="text-gray-700 hover:text-gray-900"
                     >
                     {route.name}
-                    </Link>
+                </span>
                 ))}
             </div>
         </nav>
