@@ -1,14 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate  } from "react-router-dom";
 import routes from "../routes";
-
+import { UserContext } from "../contexts/UserContext";
+import LoadingSpinner from "./LoadingSpinner";
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
+    const { user, setUser, loading } = useContext(UserContext);
 
     const handleClick = (name) => {
         navigate('/', { state: { scrollTo: name } });
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        setUser(null);
+        navigate("/");
     };
 
     return (
@@ -33,11 +41,48 @@ const Navbar = () => {
                             key={route.name}
                             to={route.path}
                             onClick={() => handleClick(route.name)}
-                            className="text-gray-700 hover:text-gray-900"
+                            className="cursor-pointer text-gray-700 hover:text-gray-900"
                             >
                             {route.name}
                         </span>
                         ))}
+                    </div>
+
+                    <div className="flex items-center gap-4">
+                    {loading ? (<LoadingSpinner/>) : user ? (
+                        <>
+                        <span className="text-sm text-gray-600 hidden md:inline">
+                            Welcome, {user.name}
+                        </span>
+                        <button
+                            onClick={() => navigate("/bookmarks")}
+                            className="text-sm text-blue-600 hover:text-blue-800"
+                        >
+                            My Bookmarks
+                        </button>
+                        <button
+                            onClick={handleLogout}
+                            className="text-sm text-red-500 hover:text-red-700"
+                        >
+                            Logout
+                        </button>
+                        </>
+                    ) : (
+                        <>
+                        <button
+                            onClick={() => navigate("/login")}
+                            className="text-sm text-gray-700 hover:text-gray-900"
+                        >
+                            Login
+                        </button>
+                        <button
+                            onClick={() => navigate("/register")}
+                            className="text-sm text-gray-700 hover:text-gray-900"
+                        >
+                            Register
+                        </button>
+                        </>
+                    )}
                     </div>
                 </div>
                 {isOpen && (

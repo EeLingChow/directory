@@ -4,7 +4,7 @@ import Hero from '../components/Hero';
 import Category from '../components/Category';
 import Shop from '../components/Shop';
 import SearchBar from '../components/SearchBar';
-import axios from 'axios';
+import API from "../services/api";
 import { scroller } from 'react-scroll';
 
 const Home = () => {
@@ -16,7 +16,7 @@ const Home = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/api/shops/all')
+    API.get('/shops/all')
     .then(res => {
         //console.log(res.data.data);
         setShops(res.data.data);

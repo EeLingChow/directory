@@ -7,8 +7,8 @@ const Shop = ({shops, error}) => {
     }
 
     return (
-        <section id="Shops" className="bg-blue-50 py-20 px-8">
-            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+        <section id="Shops" className="bg-blue-50 py-20">
+            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 mx-auto w-full max-w-screen-xl">
             {shops.map(shop => (
                 <ShopCard key={shop.id} store={shop} />
             ))}
